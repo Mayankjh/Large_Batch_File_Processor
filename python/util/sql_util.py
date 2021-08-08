@@ -1,10 +1,10 @@
 import sqlite3
 from sqlite3 import Error
-import json
-get_Conn_str = r"C:/Users/Mayank/Documents/Postman/db/postman.db"
-# with open(r'C:\Users\Mayank\Documents\Postman\configuration\conn_string.json') as json_data:
-#         prop = json.loads(json_data)
-# get_Conn_str = prop['DB_path']  
+import yaml
+get_Conn_str = ""
+with open('./../configuration/conn_string.yaml') as yaml_data:
+        prop = yaml.safe_load(yaml_data)
+get_Conn_str = prop['DB_path']  
 
 
 class SqlUtil:  
@@ -26,8 +26,7 @@ class SqlUtil:
         res = cur.execute(query)
         con.commit()
         return res
-        
-    
+
     def close_conn():
         con = sqlite3.connect(get_Conn_str)
         con.close()

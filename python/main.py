@@ -6,7 +6,7 @@ import sys
 """
 MAIN keyS
 """
-def run(product_temp,product_tbl,**config):
+def run(**config):
     while True:
         print("""Please see the below keys to choose how to proceed further:
         Press 0: Download and Unzip files to be ingested
@@ -20,12 +20,11 @@ def run(product_temp,product_tbl,**config):
             file_name = input(" Enter Google drive File Name to be downloaded e.g. 'products.csv.gz' :")
             data_pre.getfiles(fileid,file_name)
         elif key == 1:
-            # insert_to_prod(stage_table,prod_table,sql_execute)
-            ingest.data_ingestion(product_temp,product_tbl)
+            ingest.data_ingestion(config['product_temp'],config['product_table'])
             print("CSV File Ingested to Table Successfully")
         elif key == 2:
             pass
-            ingest.update_sku(product_tbl)
+            ingest.update_sku(config['product_table'])
         elif key == 3:
             print("Exiting Program...")
             break
@@ -36,8 +35,6 @@ def run(product_temp,product_tbl,**config):
 
 if __name__ == '__main__':
     config_path = sys.argv[1]
-    product_temp = 'PRODUCT_TEMP'
-    product_tbl = 'PRODUCT_TBL'
     with open(config_path) as json_data:
-        prop = yaml.load(json_data)   
-    run(product_temp,product_tbl,**prop)
+        prop = yaml.safe_load(json_data)  
+    run(**prop)
