@@ -23,6 +23,16 @@ A python based framework to handle large csv based ingestion processes
 2. `CREATE TABLE PRODUCT_TBL (NAME TEXT, SKU TEXT ,DESCRIPTION TEXT);`  -- Required before code run
 3. `CREATE TABLE PRODUCT_AGG as SELECT name,COUNT(name) as PROD_COUNT from PRODUCT_TBL group by name;` --Created during code run
 
+# Steps to create required tables
+Execute the below mentioned commands in you python terminal:
+
+1. `>>> con = sqlite3.connect(r"PUT_YOUR_DB_PATH_HERE")`
+2. `>>> cur = con.cursor()`
+3. `>>> cur.execute("CREATE TABLE PRODUCT_TEMP (NAME TEXT, SKU TEXT ,DESCRIPTION TEXT);")`
+4. `>>> cur.execute("CREATE TABLE PRODUCT_TBL (NAME TEXT, SKU TEXT ,DESCRIPTION TEXT);")`
+5. `>>> con.commit()`
+6. `>>> con.close()`
+
 # Project Workflow:
 1. Download file from G-drive location to required directory. The process uses python library google_drive_downloader to do so. User is required to provide ID and file name details for the process. The process is flexible enough to handle multiple product.csv within same zip.
 2. Ingestion process starts reading all files downloaded in the data folder and breaking them into chunks and then inserting them into stagging table. If there are no records in final product table already. The process will do one time bulk load. If there are records in the final product table and not the first time run, It will compare final and stagging table to insert new records in the final table. 
